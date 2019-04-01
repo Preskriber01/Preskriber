@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preskriber</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="static/assets/css/user.css">
+    <link rel="stylesheet" href="static/assets/css/Pretty-Registration-Form.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header"><a class="navbar-brand navbar-link" href="#"><strong>Preskriber</strong> </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"><strong>{{ username }}</strong><span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a href="logout"><i class="fa fa-power-off"></i> <strong>Logout</strong></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <div class="container">
+            {% with errors = get_flashed_messages(category_filter=["info"]) %}
+                {% if errors %}
+                    <div class="alert alert-info dismissible text-center" role="alert"">
+                        <a class="close" href="home" id="l">×</a>
+                            <ul class="list-unstyled text-center">
+                            {%- for msg in errors %}
+                                <li><strong>{{ msg }}</strong></li>
+                            {% endfor -%}
+                            </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                    <div class="alert alert-danger dismissible text-center" role="alert"">
+                        <a class="close" href="home" id="l">×</a>
+                            <ul class="list-unstyled text-center">
+                            {%- for msg in errors %}
+                                <li><strong>{{ msg }}</strong></li>
+                            {% endfor -%}
+                            </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}   
+        </div>
+    {% if organisation=="nafdac" %} 
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong><i class="material-icons">details</i></strong></a></li>
+                        <li><a href="#tab-2" role="tab" data-toggle="tab"><strong><i class="material-icons">do_not_disturb_alt</i></strong></a></li>
+                        <li><a href="#tab-3" role="tab" data-toggle="tab"><strong><i class="material-icons">https</i></strong></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
+                            <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12">
+                                <div></div>
+                                <div class="well">
+                                    <label>Revise Banned Drug(s).</label>
+                                    <p class="form-static-control">Click either the "close", "ban", or "check" button to revise users. The close button suspense the user's account, the ban button blocks the users account while the check button unblocks the user's account.</p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            {% if size!=0 %}
+                                            <div class="table-responsive">
+                                                <div class="col-lg-3 col-lg-offset-9 col-md-3 col-md-offset-9 col-sm-5 col-sm-offset-7 col-xs-10 col-xs-offset-1">
+                                                    <form class="input-group" action="search" method="POST">
+                                                        <input type="text" name="search" required="" value="{{request.form.search}}" class="form-control" placeholder="Search">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-default" type="submit">
+                                                                <i class="fa fa-search"></i>
+                                                            </button>
+                                                        </span>
+                                                    </form>
+                                                </div>
+                                                <table class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">Drug</th>
+                                                            <th class="text-center">Manufacturer</th>
+                                                            <th class="text-center">Description</th>
+                                                            <th class="text-center">Effect(s)</th>
+                                                            <th class="text-center">Action </th>
+                                                        </tr>
+                                                    </thead>
+                                                    {% for item in drugs %}
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center">{{ item.Drug_Name|e }}</td>
+                                                            <td class="text-center">{{ item.Manufacturer|e }}</td>
+                                                            <td class="text-center">{{ item.drug_description|e }}</td>
+                                                            <td class="text-center">{{ item.drug_effect|e }}</td>
+                                                            <td class="text-center">
+                                                                <div class="btn-group btn-group-xs" role="group">
+                                                                    <a class="btn center-block" role="button" href="/remove_ban/{{ item.Drug_Name|e }}">
+                                                                        <strong><i class="fa fa-close"></i></strong>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    {% endfor %}
+                                                    <caption>List of banned drug(s).</caption>
+                                                </table>
+                                                <div class="text-center">{{ pagination.info }}</div>
+                                                <div class="text-center">{{ pagination.links }}</div>
+
+                                            </div>
+                                            {% else %}
+                                            <div>
+                                                <h4>
+                                                    <p class="text-center">No banned item!</p>
+                                                </h4>
+                                            </div>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-2">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="ban_drug" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Add Drug</label>
+                                            <p class="form-static-control">Fill the input field with the appropriate information to add drug into the banned list.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="drug_name" value="{{request.form.drug_name}}" required="" autofocus="" id="New Password">
+                                            <label class="form-control-placeholder" for="name">*Drug Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="manufacturer" value="{{request.form.manufacturer}}" required="" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">*Manufacturer</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="description" value="{{request.form.description}}" required="" autofocus="" id="New Password">
+                                            <label class="form-control-placeholder" for="name">*Description</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="effect" value="{{request.form.effect}}" required="" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">*Effect</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-3">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="change_password" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Change Password</label>
+                                            <p class="form-static-control">Fill the input field with the appropriate information.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="password" value="{{request.form.password}}" required="" autofocus="" id="New Password">
+                                            <label class="form-control-placeholder" for="name">*New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="confirm_password" value="{{request.form.confirm_password}}" required="" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">*Confirm New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %} 
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong><i class="material-icons">group</i></strong></a></li>
+                        <li><a href="#tab-2" role="tab" data-toggle="tab"><strong><i class="material-icons">lock_outline</i></strong></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
+                            <div class="col-lg-12 col-lg-offset-0 col-md-12 col-md-offset-0 col-sm-12 col-sm-offset-0 col-xs-12">
+                                <div></div>
+                                <div class="well">
+                                    <label>Revise {% filter upper %} {{organisation}} {% endfilter %} Members</label>
+                                    <p class="form-static-control">Click either the "close", "ban", or "check" button to revise users. The close button suspense the user's account, the ban button blocks the users account while the check button unblocks the user's account.</p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="table-responsive">
+                                                <div class="col-lg-3 col-lg-offset-9 col-md-3 col-md-offset-9 col-sm-5 col-sm-offset-7 col-xs-10 col-xs-offset-1">
+                                                    <form class="input-group" action="search" method="POST">
+                                                        <input type="text" name="search" required="" value="{{request.form.search}}" class="form-control" placeholder="Search">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-default" type="submit">
+                                                                <i class="fa fa-search"></i>
+                                                            </button>
+                                                        </span>
+                                                    </form>
+                                                </div>
+                                                <table class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">First Name</th>
+                                                            <th class="text-center">Last Name</th>
+                                                            <th class="text-center">Email</th>
+                                                            <th class="text-center">Level</th>
+                                                            <th class="text-center">Organisation</th>
+                                                            <th class="text-center">Status</th>
+                                                            <th class="text-center">Action </th>
+                                                        </tr>
+                                                    </thead>
+                                                    {% for item in users %}
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-center">{{ item.First_Name|e }}</td>
+                                                            <td class="text-center">{{ item.Last_Name|e }}</td>
+                                                            <td class="text-center">{{ item.Email|e }}</td>
+                                                            <td class="text-center">{{ item.Level|e }}</td>
+                                                            <td class="text-center">{{ item.Organisation|e }}</td>
+                                                            <td class="text-center">{{ item.Status|e }}</td>
+                                                            <td class="text-center">
+                                                                <div class="btn-group btn-group-xs" role="group">
+                                                                    <a class="btn" role="button" href="/revise_down/{{ item.Email|e }}">
+                                                                       <strong><i class="fa fa-close"></i></strong> 
+                                                                    </a>
+                                                                    <a class="btn center-block" role="button" href="/revise_ban/{{ item.Email|e }}">
+                                                                        <strong><i class="fa fa-ban"></i></strong>
+                                                                    </a>
+                                                                    <a class="btn center-block" role="button" href="/revise_up/{{ item.Email|e }}">
+                                                                        <strong><i class="fa fa-check"></i></strong>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    {% endfor %}
+                                                    <caption>List of {% filter upper %} {{organisation}} {% endfilter %} member(s).</caption>
+                                                </table>
+                                                <div class="text-center">{{ pagination.info }}</div>
+                                                <div class="text-center">{{ pagination.links }}</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-2">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="change_password" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Change Password</label>
+                                            <p class="form-static-control">Fill the input field with the appropriate information.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="password" value="{{request.form.password}}" required="" autofocus="" id="New Password">
+                                            <label class="form-control-placeholder" for="name">*New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="confirm_password" value="{{request.form.confirm_password}}" required="" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">*Confirm New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/js/v.js"></script>
+    <script src="static/assets/js/x.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

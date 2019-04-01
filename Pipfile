@@ -1,0 +1,25 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "2.7.15"
+
+
+[dev-packages]
+
+
+
+[packages]
+
+flask = "*"
+flask-bcrypt = "*"
+flask-sqlalchemy = "*"
+sqlalchemy = "*"
+flask-paginate = "*"
+flask-restless = "*"
+flask-mail = "*"
+stringgenerator = "*"
+

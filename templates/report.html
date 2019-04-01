@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preskriber</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="static/assets/css/user.css">
+    <link rel="stylesheet" href="static/assets/css/Pretty-Registration-Form.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header"><a class="navbar-brand navbar-link"><strong>Preskriber</strong> </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"><strong>{{ username }}</strong><span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a href="logout"><i class="fa fa-power-off"></i> <strong>Logout</strong></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container" id="klm">
+        {% if level=="physician"%}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12">
+                    {% if size>=1%}
+                    <div class="well">
+                        <label>Patient's Prescriptions</label>
+                        <p class="form-static-control">Below is a table showing the last {{ size }} prescription(s) given to the patient.</p>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Doctor's Email</th>
+                                                <th>Date </th>
+                                                <th>Drug Prescription(s)</th>
+                                            </tr>
+                                        </thead>
+                                        {% for item in prescriptions %}
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ item.Created_By|e }}</td>
+                                                <td>{{ item.Date_Created|e }}</td>
+                                                <td>{{ item.Prescription|e }}</td>
+                                            </tr>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                        <p class="text-center"><a class="btn btn-link btn-center" role="button" href="home"><strong>Return</strong></a></p>
+                    </div>
+                    {% else %}
+                    <div class="well">
+                        <label>Patient's Prescriptions</label>
+                        <p class="form-static-control">The patient has no recorded prescription.</p>
+                        <p class="text-center"><a class="btn btn-link btn-center" role="button" href="home"><strong>Return</strong></a></p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+                    {% if prescription=="prescription" %}
+                    <div class="well">
+                        <label>PRESCRIPTION</label>
+                        <p class="form-static-control">A basic template showing the proper way to create bootstrap forms using form group components, labels and input fields.</p>
+                        <ul class="list-group">
+                            <li class="list-group-item text text-center"><span>Prescription by- {{ prescription.Created_By }}</span></li>
+                            <li class="list-group-item text-center"><span>Prescription- {{ prescription.Prescription }}</span></li>
+                            <li class="list-group-item text-center"><span class="text-danger"><strong>Expired</strong>! </span><span class="text-success"><strong>Drug Precription still valid!</strong></span></li>
+                        </ul>
+                        <p class="text-center"><a class="btn btn-primary btn-center" id="klm007" role="button" href="#"><strong>Confirm Receipt</strong></a></p>
+                    <p class="text-center"><a class="btn btn-link btn-center" role="button" href="#"><strong>Return</strong></a></p>
+                    </div>
+                    {% else %}
+                   <div class="well">
+                        <h3 class="text-center">Nothing here!</h3>
+                        <p class="text-center"><a class="btn btn-link btn-center" role="button" href="home"><strong>Return</strong></a></p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

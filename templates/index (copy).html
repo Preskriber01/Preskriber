@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="k2PO8oPw3WrABBQ3hQkA9XMsGMsHTyQpYcE-hEK4Qkc" />
+    <title>Preskriber</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/css/user.css">
+    <link rel="stylesheet" href="static/assets/css/Pretty-Registration-Form.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="page-header">
+            <h2 class="text-muted"><strong>Preskriber</strong> </h2>
+        </div>
+    </div>
+    <div class="container" id="klm">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 hidden-sm hidden-xs" id="klm001">
+                <div class="jumbotron">
+                    <h3 class="text-nowrap text-center">...enhancing healthcare...</h3>
+                    <p class="text-center"><a class="btn btn-lg btn-center" role="button" id="klm007" href="signup"><strong>Create New Account</strong></a></p>
+                    <p class="text-center"><a class="btn btn-lg btn-success btn-center" role="button" href="check"><strong>Check Drug</strong></a></p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-md-push-0 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1" id="klm002">
+                    {% with errors = get_flashed_messages(category_filter=["info"]) %}
+                        {% if errors %}
+                        <div class="alert alert-info dismissible text-center" role="alert"">
+                            <a class="close" href="/">×</a>
+                                <ul class="list-unstyled text-center">
+                                {%- for msg in errors %}
+                                    <li><strong>{{ msg }}</strong></li>
+                                {% endfor -%}
+                                </ul>
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+                    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                        {% if errors %}
+                        <div class="alert alert-danger dismissible text-center" role="alert"">
+                            <a class="close" href="/">×</a>
+                                <ul class="list-unstyled text-center">
+                                {%- for msg in errors %}
+                                    <li><strong>{{ msg }}</strong></li>
+                                {% endfor -%}
+                                </ul>
+                        </div>
+                        {% endif %}
+                    {% endwith %} 
+                <div class="panel panel-default" id="login">
+                    <div class="panel-body">
+                        <h3 class="text-center text-muted" id="klm006"><strong>Please Login</strong></h3>
+                        <form id="klm4" action="login" method="POST" class="bootstrap-form-with-validation">
+                            <div class="form-group">
+                                <input class="form-control input-lg" name="email" value="{{request.form.email}}" type="email" required="" autofocus="" id="email">
+                                <label class="form-control-placeholder" for="name">Email</label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control input-lg" name="password" value="{{request.form.password}}" type="password" required="" autofocus="" id="password">
+                                <label class="form-control-placeholder" for="name">Password</label>
+                            </div>
+                            <button class="btn btn-lg btn-primary btn-block" type="submit"><strong>Login</strong></button><a class="btn btn-success btn-lg btn-block hidden-md hidden-lg" role="button" href="check"><strong>Check Drug</strong></a><a class="btn btn-block btn-lg hidden-md hidden-lg" id="klm007" role="button" href="signup"><strong>Create New Account</strong></a><a class="btn btn-link btn-lg btn-block" role="button" href="reset"><strong>Forgot password?</strong></a></form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="site-footer">
+        <div class="container">
+            <hr>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h5 class="text-muted">Preskriber © 2018</h5></div>
+                <div class="col-sm-6 social-icons"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-youtube"></i></a></div>
+            </div>
+        </div>
+    </footer>
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

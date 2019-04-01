@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preskriber</title>
+    <link rel="stylesheet" href="static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="static/assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="static/assets/css/user.css">
+    <link rel="stylesheet" href="static/assets/css/Pretty-Registration-Form.css">
+    <link rel="stylesheet" href="static/assets/DataTables/datatables.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header"><a class="navbar-brand navbar-link"><strong>Preskriber</strong> </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"><strong>{{ username }}</strong><span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li role="presentation"><a href="logout"><i class="fa fa-power-off"></i> <strong>Logout</strong></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <div class="container text-center">
+            {% with errors = get_flashed_messages(category_filter=["info"]) %}
+                {% if errors %}
+                    <div class="alert alert-info dismissible text-center" role="alert"">
+                        <a class="close" href="home" id="l">×</a>
+                            <ul class="list-unstyled text-center">
+                            {%- for msg in errors %}
+                                <li><strong>{{ msg }}</strong></li>
+                            {% endfor -%}
+                            </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                    <div class="alert alert-danger dismissible text-center" role="alert"">
+                        <a class="close" href="home" id="l">×</a>
+                            <ul class="list-unstyled text-center">
+                            {%- for msg in errors %}
+                                <li><strong>{{ msg }}</strong></li>
+                            {% endfor -%}
+                            </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}   
+        </div>
+    {% if level=="physician"%}
+    <div class="container" id="physician">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong><i class="material-icons">description</i></strong></a></li>
+                        <li><a href="#tab-2" role="tab" data-toggle="tab"><strong><i class="material-icons">person_add</i></strong></a></li>
+                        <li><a href="#tab-3" role="tab" data-toggle="tab"><strong><i class="material-icons">filter_9_plus</i></strong></a></li>
+                        <li><a href="#tab-4" role="tab" data-toggle="tab"><strong><i class="material-icons">beenhere</i></strong></a></li>
+                        <li><a href="#tab-5" role="tab" data-toggle="tab"><strong><i class="material-icons">https</i></strong></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="make_prescription" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label"><strong>Make Prescription</strong></label>
+                                            <p class="form-static-control">To make a prescription, enter the patient's preskriber identification code, the drug prescription, and the prescription expiry date.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="preskriber_id" value="{{request.form.preskriber_id}}" required="" autofocus="" id="Preskriber ID">
+                                            <label class="form-control-placeholder" for="name">Preskriber ID</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control input-lg" rows="6" name="drug_prescription" value="{{request.form.drug_prescription}}" required="" maxlength="200" id="Drug Prescription"></textarea>
+                                            <label class="form-control-placeholder" for="name">Drug Prescription</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" name="expiry_date" value="{{request.form.expiry_date}}" type="date" required="">
+                                            <label class="form-control-placeholder" for="name">Expiry Date</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-2">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="add_patient" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Add New Patient</label>
+                                            <p class="form-static-control">Register a new preskriber patient by filing the input field with the appropriate information.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="first_name" value="{{request.form.first_name}}" required="" autofocus="" id="First Name">
+                                            <label class="form-control-placeholder" for="name">*First Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="middle_name" value="{{request.form.middle_name}}" required="" autofocus="" id="Middle Name">
+                                            <label class="form-control-placeholder" for="name">*Middle Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="last_name" value="{{request.form.last_name}}" required="" autofocus="" id="Last Name">
+                                            <label class="form-control-placeholder" for="name">*Last Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="email" name="email" value="{{request.form.email}}" required="" autofocus="" id="Email">
+                                            <label class="form-control-placeholder" for="name">*Email Address</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="phone" value="{{request.form.phone}}" pattern="[0-9]{11}" maxlength="11" required="" autofocus="" id="Phone">
+                                            <label class="form-control-placeholder" for="name">*Phone</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="date" name="date_of_birth" value="{{request.form.date_of_birth}}" required="">
+                                            <label class="form-control-placeholder" for="name">*Date of Birth</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <select class="form-control" name="gender" value="{{request.form.gender}}" required="" autofocus="">
+                                                <optgroup label="Gender">
+                                                    <option value="Male" selected=""><strong>Male</strong></option>
+                                                    <option value="Female" selected=""><strong>Female</strong></option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-3">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="view_prescription" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label"><strong>View Prescription</strong></label>
+                                            <p class="form-static-control">This displays the last 10 drug prescription of the patient. To use this functionality, use the "Request Permission" functionality first to get a secret code.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="secret_code" value="{{request.form.secret_code}}" required="" autofocus="" id="Seccet Code">
+                                            <label class="form-control-placeholder" for="name">Secret Code</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-4">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="request_permission" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Request Permission</label>
+                                            <p class="form-static-control">Enter the patient's Preskriber ID, and email address, and click the submit button. This sends a secret code to the patient's email.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="preskriber_id" value="{{request.form.preskriber_id}}" required="" autofocus="" id="Preskriber ID_2">
+                                            <label class="form-control-placeholder" for="name">Preskriber ID</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-5">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="change_password" method="POST" class="bootstrap-form-with-validation" data-toggle="validator">
+                                        <div class="form-group">
+                                            <label class="control-label">Change Password</label>
+                                            <p class="form-static-control">Fill the input field with the appropriate information(a minimum of 7 alphameric characters, and least one uppercase/lowercase letter), and click the submit button.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="password" value="{{request.form.password}}" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" autofocus="" id="New Password_01">
+                                            <label class="form-control-placeholder" for="name">New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="confirm_password" value="{{request.form.confirm_password}}" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">Confirm Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif level=="pharmacist"%}
+    <div class="container" id="pharmacist">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong><i class="material-icons">verified_user</i></strong></a></li>
+                        <li><a href="#tab-2" role="tab" data-toggle="tab"><strong><i class="material-icons">add_circle</i></strong></a></li>
+                        <li><a href="#tab-3" role="tab" data-toggle="tab"><strong><i class="material-icons">group</i></strong></a></li>
+                        <li><a href="#tab-4" role="tab" data-toggle="tab"><strong><i class="material-icons">https</i></strong></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="verify_prescription" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Verify Prescription</label>
+                                            <p class="form-static-control">Enter the drug prescription code into the input field, and click the submit button to view the prescription.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="prescription_code" value="{{request.form.prescription_code}}" required="" autofocus="" id="Prescription Code">
+                                            <label class="form-control-placeholder" for="name">*Prescription Code</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-2">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="add_affliate" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Add Affliate</label>
+                                            <p class="form-static-control">Add an affliate into your circle. Enter the user's details, and store address.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="first_name" value="{{request.form.first_name}}" required="" autofocus="" id="First Name">
+                                            <label class="form-control-placeholder" for="name">*First Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="middle_name" value="{{request.form.middle_name}}" required="" autofocus="" id="Middle Name">
+                                            <label class="form-control-placeholder" for="name">Middle Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="last_name" value="{{request.form.last_name}}" required="" autofocus="" id="Last Name">
+                                            <label class="form-control-placeholder" for="name">*Last Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="email" name="email" value="{{request.form.email}}" required="" autofocus="" id="Email Address">
+                                            <label class="form-control-placeholder" for="name">*Email Address</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="phone" value="{{request.form.phone}}" pattern="[0-9]{11}" maxlength="11" required="" autofocus="" id="Phone">
+                                            <label class="form-control-placeholder" for="name">*Phone</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="store_name" value="{{request.form.store_name}}" required="" autofocus="" id="Pharmacitical Store Name">
+                                            <label class="form-control-placeholder" for="name">*Pharmacitical Store Name</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control input-lg" rows="4" name="store_address" value="{{request.form.store_address}}" required="" maxlength="200" id="Pharmacitical Store Address"></textarea>
+                                            <label class="form-control-placeholder" for="name">*Pharmacitical Store Address</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-3">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    {% if affliate_size>0 %}
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            {% for item in affliate_size %}
+                                            <span class="text-center">{{ item.First_Name|e }}</span>
+                                            <button class="close" href="/remove/{{ item.Email|e }}">
+                                                <a href="#" class="close">&times;</a>
+                                            </button>
+                                            {% endfor %}
+                                        </li>
+                                    </ul>
+                                    {% else %}
+                                    <h4 class="text-center">Affliate list is empty!</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-4">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="change_password" method="POST" class="bootstrap-form-with-validation" data-toggle="validator">
+                                        <div class="form-group">
+                                            <label class="control-label">Change Password</label>
+                                            <p class="form-static-control">Fill the input field with the appropriate information, and click the submit button-(a minimum of 7 alphameric characters, and least one uppercase/lowercase letter).</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="password" value="{{request.form.password}}" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" autofocus="" id="New Password">
+                                            <label class="form-control-placeholder" for="name">New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="first_name" value="{{request.form.confirm_password}}" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">Confirm New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container" id="affliate">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab-1" role="tab" data-toggle="tab"><strong><i class="material-icons">verified_user</i></strong></a></li>
+                        <li><a href="#tab-2" role="tab" data-toggle="tab"><strong><i class="material-icons">https</i></strong></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" role="tabpanel" id="tab-1">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="verify_prescription" method="POST" class="bootstrap-form-with-validation">
+                                        <div class="form-group">
+                                            <label class="control-label">Verify Prescription</label>
+                                            <p class="form-static-control">Enter the drug prescription code into the input field, and click the submit button to view the prescription.</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="text" name="prescription_code" value="{{request.form.prescription_code}}" required="" autofocus="" id="Prescription Code">
+                                            <label class="form-control-placeholder" for="name">*Prescription Code</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" role="tabpanel" id="tab-2">
+                            <div class="col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12">
+                                <div class="well">
+                                    <form action="change_password" method="POST" class="bootstrap-form-with-validation" data-toggle="validator">
+                                        <div class="form-group">
+                                            <label class="control-label">Change Password</label>
+                                            <p class="form-static-control">Fill the input field with the appropriate information, and click the submit button-(a minimum of 7 alphameric characters, and least one uppercase/lowercase letter).</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="password" value="{{request.form.password}}" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" autofocus="" id="New Password">
+                                            <label class="form-control-placeholder" for="name">New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control input-lg" type="password" name="confirm_password" value="{{request.form.confirm_password}}" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,}" autofocus="" id="Confirm New Password">
+                                            <label class="form-control-placeholder" for="name">Confirm New Password</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-primary center-block" type="submit"><strong>Submit</strong> </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <script src="static/assets/js/v.js"></script>
+    <script src="static/assets/js/x.js"></script>
+    <script src="static/assets/js/a.js"></script>
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/DataTables/datatables.min.js"></script>
+    <script src="static/assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
